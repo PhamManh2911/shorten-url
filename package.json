@@ -1,0 +1,26 @@
+{
+  "name": "shorten-url",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "start:dev": "nodemon",
+    "start:pro": "node dist/server.js"
+  },
+  "dependencies": {
+    "@typegoose/typegoose": "^13.2.1",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.0",
+    "express": "^4.19.2",
+    "kafkajs": "^2.2.4",
+    "mongoose": "^9.3.1"
+  },
+  "devDependencies": {
+    "@types/kafkajs": "^1.9.0",
+    "@types/crypto-js": "^4.2.2",
+    "@types/express": "^4.17.21",
+    "@types/node": "^25.5.0",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  }
+}

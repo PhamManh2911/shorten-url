@@ -1,0 +1,19 @@
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+
+  broker:
+    image: apache/kafka:latest
+    restart: always
+    ports:
+      - "9092:9092"
+volumes:
+  mongo_data:
