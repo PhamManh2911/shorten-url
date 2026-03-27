@@ -1,5 +1,6 @@
 import { enc, SHA256 } from "crypto-js";
 import { Request, Response } from "express";
+import { redis } from "./cache";
 import { ShortenUrlModel } from "./model";
 import producer from "./producer";
 
@@ -50,16 +51,39 @@ class Controller {
   getShortenUrl = async (req: Request, res: Response) => {
     // get the actual url and redirect, and then add 1 to clickCount
     const urlId = req.params.urlId;
-    const shortenUrl = await ShortenUrlModel.findById(urlId);
+    // using cache for reduce database read
+    let shortenUrl = await redis.get(urlId);
 
     if (!shortenUrl) {
-      return res.status(404).send({ message: "url not found" });
+      const shortenUrlDocument = await ShortenUrlModel.findById(urlId);
+
+      if (!shortenUrlDocument) {
+        return res.status(404).send({ message: "url not found" });
+      }
+      shortenUrl = shortenUrlDocument.url;
+      await redis.set(
+        urlId,
+        shortenUrl,
+        "EX",
+        Math.floor(30 * 60 + 5 * 60 * Math.random()),
+      );
     }
-    await producer.send({
-      topic: "click-count",
-      messages: [{ value: JSON.stringify({ shortenUrlId: urlId }) }],
-    });
-    res.redirect(shortenUrl.url);
+    // using fire-and-forget producer to not await for acknowledgement
+    producer
+      .send({
+        topic: "click-count",
+        messages: [
+          {
+            value: JSON.stringify({
+              shortenUrlId: urlId,
+            }),
+          },
+        ],
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    res.redirect(shortenUrl);
   };
 
   getShortenUrlStats = async (req: Request, res: Response) => {

@@ -9,6 +9,14 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo_data:/data/db
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - redis_data:/data
 
   broker:
     image: apache/kafka:latest
@@ -17,3 +25,4 @@ services:
       - "9092:9092"
 volumes:
   mongo_data:
+  redis_data:

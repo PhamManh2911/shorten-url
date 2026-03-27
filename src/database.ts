@@ -6,4 +6,5 @@ import { ENV } from "./configs/env";
     dbName: "shorten-url",
   });
   mongoose.set("debug", true);
+  console.log("=====> Database connected");
 })();

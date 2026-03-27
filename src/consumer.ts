@@ -1,3 +1,6 @@
+import "./configs/env";
+import "./database";
+
 import { kafka } from "./broker";
 import { ShortenUrlModel } from "./model";
 
@@ -9,11 +12,13 @@ import { ShortenUrlModel } from "./model";
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      const value = JSON.parse(message.value?.toString() ?? "");
-      const shortedUrlId = value.shortenUrlId;
+      const value = JSON.parse(message.value?.toString() ?? "") as {
+        shortenUrlId: string;
+      };
+      const { shortenUrlId } = value;
 
       await ShortenUrlModel.updateOne(
-        { _id: shortedUrlId },
+        { _id: shortenUrlId },
         { $inc: { clickCount: 1 } },
       );
     },

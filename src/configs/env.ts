@@ -9,4 +9,6 @@ export const ENV = {
   APP_KAFKA_BROKERS: (process.env.APP_KAFKA_BROKERS || "localhost:9092").split(
     ",",
   ),
+  APP_CACHE_CONNECTION_STRING:
+    process.env.APP_CACHE_CONNECTION_STRING || "redis://127.0.0.1:6379",
 };
