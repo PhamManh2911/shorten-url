@@ -1,1 +1,1 @@
-wrk -t10 -c400 -d20s --latency http://127.0.0.1:3000/shorten-url/ae79d8db45e3
+wrk -t10 -c400 -d20s --latency http://127.0.0.1:3000/shorten-url/rnnY20Xj

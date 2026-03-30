@@ -1,5 +1,5 @@
 BASE_URL=http://localhost:3000/shorten-url
-URL_ID?=ae79d8db45e3
+URL_ID?=rnnY20Xj
 ORIGINAL_URL?=https://www.youtube.com/
 
 .PHONY: create get stats
